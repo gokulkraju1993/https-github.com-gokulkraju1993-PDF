@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using IronPdf;
 
 namespace HtmlToPdfConvert.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -37,9 +38,20 @@ namespace HtmlToPdfConvert.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost]
+        public ActionResult<string> CreatePdf([FromForm] string HTMLString)
         {
+            DateTime currentDate = DateTime.Now;
+            //var Renderer = new IronPdf.HtmlToPdf();
+            //var PDF = Renderer.RenderHtmlAsPdf(HTMLString);
+            var OutputPath = currentDate.Ticks.ToString() + "HtmlToPDF.pdf";
+            //PDF.SaveAs(@"C:\Users\gokul.raju\Desktop\Test\" + OutputPath);
+            //return (@"C:\Users\gokul.raju\Desktop\Test\" + OutputPath);
+
+
+            HtmlToPdf HtmlToPdf = new IronPdf.HtmlToPdf();
+            HtmlToPdf.RenderHtmlAsPdf(HTMLString).SaveAs(@"C:\Users\gokul.raju\Desktop\Test\" + OutputPath);
+            return (@"C:\Users\gokul.raju\Desktop\Test\" + OutputPath);
         }
     }
 }
